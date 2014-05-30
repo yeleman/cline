@@ -13,6 +13,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.static import serve as static_serve
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from ivr.path import AUDIO_FOLDER, REPORT_FOLDER
 from ivr.utils import number_from_callerID
@@ -28,10 +29,13 @@ def store_uploaded_file(f, report):
         fwav.write(chunk)
     fwav.close()
 
+
+@login_required
 def audio_download(request, fname):
     return static_serve(request, fname, AUDIO_FOLDER, True)
 
 
+@login_required
 def mp3_download(request, reportID):
     report = Report.get_or_none(reportID)
     if report is None:
@@ -77,6 +81,7 @@ def ivr_upload(request):
                   content_type='application/xml')
 
 
+@login_required
 def home(request):
 
     context = {}
