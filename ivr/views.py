@@ -10,7 +10,7 @@ import logging
 
 from django.shortcuts import render
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.views.static import serve as static_serve
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -30,9 +30,8 @@ def store_uploaded_file(f, report):
     fwav.close()
 
 
-@login_required
 def audio_download(request, fname):
-    return static_serve(request, fname, AUDIO_FOLDER, True)
+    return do_serve_file_no_auth(request, fname=fname, folder=AUDIO_FOLDER)
 
 
 @login_required
@@ -40,7 +39,30 @@ def mp3_download(request, reportID):
     report = Report.get_or_none(reportID)
     if report is None:
         raise Http404("No report with ID {}".format(reportID))
-    return static_serve(request, report.audio_basename(), REPORT_FOLDER, True)
+    return do_serve_file_no_auth(request,
+                                 fname=report.audio_basename(),
+                                 folder=REPORT_FOLDER,
+                                 as_attachment=bool(request.GET.get('dl')))
+
+
+def serve_cached_file(request, fname=None, public=False):
+    if not fname.startswith('public_'):
+        return login_required(do_serve_file_no_auth)(request, fname)
+    return do_serve_file_no_auth(request, fname)
+
+
+def do_serve_file_no_auth(request,
+                          fname=None,
+                          folder=REPORT_FOLDER,
+                          as_attachment=False):
+    if settings.SERVE_AUDIO_FILES:
+        return static_serve(request, fname, folder, True)
+    response = HttpResponse()
+    del response['content-type']
+    target = 'protected_dl' if as_attachment else 'protected'
+    response['X-Accel-Redirect'] = "/{target}/{fname}".format(target=target,
+                                                              fname=fname)
+    return response
 
 
 @csrf_exempt

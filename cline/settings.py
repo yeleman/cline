@@ -135,6 +135,9 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 
+# True to serve files via django server, False to let Nginx do it
+SERVE_AUDIO_FILES = True
+
 ORANGE = 'orange'
 MALITEL = 'malitel'
 FOREIGN = 'foreign'

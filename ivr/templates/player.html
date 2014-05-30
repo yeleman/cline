@@ -1,1 +1,1 @@
-<audio src="{% url 'mp3' reportID=report.id %}" preload="none" />
+<a class="mp3dl btn btn-default" title="Download report #{{ report.id }} as MP3" href="{% url 'mp3' reportID=report.id %}?dl=yes"><i class="glyphicon glyphicon-download"></i></a><audio src="{% url 'mp3' reportID=report.id %}" preload="none" />

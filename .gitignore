@@ -57,3 +57,4 @@ docs/_build/
 *.sqlite3
 *.DS_Store
 settings_local.py
+reports/*
