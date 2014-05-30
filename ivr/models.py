@@ -53,6 +53,9 @@ class Report(models.Model):
             'text': self.text
         }
 
+    def verbose_type(self):
+        return self.TYPES.get(self.report_type)
+
     def export(self):
         with open('report_{id}.json'.format(id=self.id)) as f:
             json.dump(self.to_dict(), f)

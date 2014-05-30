@@ -4,10 +4,15 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import logging
 import re
 import wave
 
 from django.conf import settings
+from django.core.mail import send_mail
+from django.core.management import call_command
+
+logger = logging.getLogger(__name__)
 
 # default country prefix
 COUNTRY_PREFIX = getattr(settings, 'COUNTRY_PREFIX', 223)
@@ -31,6 +36,37 @@ ALL_COUNTRY_CODES = [1242, 1246, 1264, 1268, 1284, 1340, 1345, 1441, 1473,
                      880, 886, 90, 91, 92, 93, 94, 95, 960, 961, 962, 963,
                      964, 965, 966, 967, 968, 970, 971, 972, 973, 974, 975,
                      976, 977, 98, 992, 993, 994, 995, 996, 998]
+
+
+def notify_new_report(report):
+    # sync data with online server
+    call_command('sync_ivr_data')
+
+    message = settings.NOTIFICATION_MESSAGE.format(
+        report=report,
+        type=report.verbose_type(),
+        identity=report.identity,
+        url=settings.ONLINE_URL,
+        agreement="DOES NOT AGREE" if not report.agreement else "AGREES")
+
+    # send SMS to contact person
+    for number in settings.CONTACT_NUMBERS:
+        send_sms(number, message)
+
+
+def send_sms(identity, text):
+    _, number = phonenumber_cleaned(identity)
+    to_address = "{number}@{domain}".format(number=number,
+                                            domain=settings.VOICE_POP3_DOMAIN)
+    subject = "New SMS for {}".format(identity)
+    logger.info("Sending SMS to {identity}: {text}".format(
+        identity=identity,
+        text=text))
+    return send_mail(subject=subject,
+              message=text,
+              from_email=settings.VOICE_POP3_EMAIL_ADDRESS,
+              recipient_list=[to_address],
+              fail_silently=False)
 
 
 def get_wave_duration(path):

@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from ivr.path import AUDIO_FOLDER, REPORT_FOLDER
-from ivr.utils import number_from_callerID
+from ivr.utils import number_from_callerID, notify_new_report
 from ivr.models import Report
 
 logger = logging.getLogger(__name__)
@@ -83,19 +83,17 @@ def ivr_valid_agreement(request):
 @csrf_exempt
 def ivr_upload(request):
     context = {}
-    print("upload")
-    print(request.GET)
     identity = number_from_callerID(request.GET.get('callerID'))
-    print("identity", identity)
     report = Report.objects.create(identity=identity,
                                    report_type=Report.TYPE_AUDIO)
-    print("report", report)
     try:
         report.process_audio(request.FILES.get('recorded_report'))
         context.update({'reportID': report.id, 'report': report})
     except Exception as e:
         context.update({'reportID': None, 'report': None})
         print(e)
+    finally:
+        notify_new_report(report)
 
     return render(request,
                   'after_upload.xml',

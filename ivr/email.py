@@ -8,13 +8,12 @@ import logging
 import poplib
 import email
 
-from django.core.mail import send_mail
 from dateutil.parser import parse as dt_parse
 from django.conf import settings
 from django.utils import timezone
 
 from ivr.models import SMSMessage, Report
-from ivr.utils import phonenumber_cleaned
+from ivr.utils import send_sms, notify_new_report
 
 logger = logging.getLogger(__name__)
 
@@ -90,20 +89,6 @@ def handle_incoming_sms(sms):
 
     if created:
         send_sms(sms.identity, settings.VOICE_AGREEMENT_MESSAGE)
+        notify_new_report(report)
 
     return report
-
-
-def send_sms(identity, text):
-    _, number = phonenumber_cleaned(identity)
-    to_address = "{number}@{domain}".format(number=number,
-                                            domain=settings.VOICE_POP3_DOMAIN)
-    subject = "New SMS for {}".format(identity)
-    logger.info("Sending SMS to {identity}: {text}".format(
-        identity=identity,
-        text=text))
-    return send_mail(subject=subject,
-              message=text,
-              from_email=settings.VOICE_POP3_EMAIL_ADDRESS,
-              recipient_list=[to_address],
-              fail_silently=False)

@@ -161,6 +161,15 @@ VOICE_AGREEMENT_MESSAGE = ("Merci d'avoir enregistré votre rapport. "
                            "Nous autorisez-vous à vous rappeller pour obtenir "
                            "plus d'informations ? Si oui, répondez OUI.")
 
+SYNCHRO_URL = "user@server.local:repo/"
+
+# Persons getting notified of new reports
+CONTACT_NUMBERS = []
+CONTACT_EMAILS = []
+ONLINE_URL = "http://my.web.site"
+NOTIFICATION_MESSAGE = ("A new *{type}* report has been received on the "
+                        "Anti-corruption Hotline from {identity}. {url}")
+
 EMAIL_USE_TLS = False
 EMAIL_HOST = VOICE_POP3_SERVER
 EMAIL_PORT = 25
