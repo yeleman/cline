@@ -1,0 +1,42 @@
+{% load staticfiles %}<!doctype html>
+<html class="">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{% block title %}Hotline anti-corruption{% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en-en" />
+    <link href="http://icons.iconarchive.com/icons/icons8/android/64/Shopping-money-bag-icon.png" rel="icon" type="image/png" />
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <style type="text/css">
+    header { background-color: #002a6c; color: white; padding: 1em; }
+    header h1 { text-transform:capitalize; font-variant:small-caps; }
+    header h2 { color: #aecdeb; float: right; }
+    blockquote p { font-family: monospace;}
+    #content {
+        padding-top: 1em;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h2>MTI/AECOM</h2>
+            <h1>Anti-Corruption Hotline</h1>
+        </header>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://kolber.github.io/audiojs/audiojs/audio.min.js"></script>
+<script>
+$(document).ready(function(){
+{% block onJQready %}{% endblock %}
+});
+audiojs.events.ready(function() {
+    var as = audiojs.createAll();
+});
+</script>
+</html>

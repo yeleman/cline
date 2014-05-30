@@ -1,0 +1,10 @@
+<form id="additional-info">
+<block>
+    <prompt bargein="true" cond="true" >
+        {% include "audio.xml" with file="2.2.additional-info" breakbefore="300" breakafter="3000" %}
+    </prompt>
+    <goto next="#additional-info_choice" />
+</block>
+</form>
+
+{% include "digit_form.xml" with id="additional-info_choice" filled_one="instructions" noinput="start" nomatch="start" %}

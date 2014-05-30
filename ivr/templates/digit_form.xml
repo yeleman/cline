@@ -1,0 +1,20 @@
+<form id="{{ id }}">
+    <field name="barge" type="digits">
+        <property name="interdigittimeout" value="1ms"/>
+        <property name="timeout" value="1ms"/>
+        <prompt bargein="true" cond="true" timeout="0s"></prompt>
+        <noinput><goto next="#{{ noinput }}" /></noinput>
+        <nomatch><goto next="#{{ nomatch }}" /></nomatch>
+        <filled>
+            <if cond="barge == 1">
+                <goto next="#{{ filled_one }}" />
+            {% if filled_two %}
+            <elseif cond="barge == 2" />
+                <goto next="#{{ filled_two }}" />
+            {% endif %}
+            <else />
+                <throw event="nomatch"/>
+            </if>
+        </filled>
+    </field>
+</form>

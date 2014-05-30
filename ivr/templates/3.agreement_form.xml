@@ -1,0 +1,17 @@
+<form id="agreement">
+<block>
+    <prompt bargein="true" cond="true" >
+        {% include "audio.xml" with file="3.agreement" breakbefore="300" breakafter="5000" %}
+    </prompt>
+    <goto next="#agreement_choice" />
+</block>
+</form>
+
+{% include "digit_form.xml" with id="agreement_choice" filled_one="valid_agreement" noinput="thankyou" nomatch="thankyou" %}
+
+<form id="valid_agreement">
+<block>
+    <submit next="{% url 'valid_agreement' %}?{{ querystr }}&amp;reportID={{ reportID }}" />
+    <goto next="#thankyou"/>
+</block>
+</form>

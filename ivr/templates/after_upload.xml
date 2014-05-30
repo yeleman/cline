@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
+<nomatch>
+    <goto next="#agreement" />
+</nomatch>
+
+{% include "3.agreement_form.xml" %}
+
+{% include "4.thank-you_form.xml" %}
+</vxml>

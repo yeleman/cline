@@ -1,0 +1,10 @@
+ <form id="record_report">
+    <var name="recorded_report" />
+    <record name="report" maxtime="180s" finalsilence="4s" beep="true" dtmfterm="true" type="audio/x-wav">
+        <filled>
+            <assign name="recorded_report" expr="report" />
+            <submit next="{% url 'upload' %}?{{ querystr }}" enctype="multipart/form-data" namelist="recorded_report" method="post" />
+            <goto next="#thankyou"/>
+        </filled>
+    </record>
+</form>

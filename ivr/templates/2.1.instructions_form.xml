@@ -1,0 +1,8 @@
+<form id="instructions">
+<block>
+    <prompt>
+        {% include "audio.xml" with file="2.1.instructions" breakbefore="300" breakafter="300" %}
+    </prompt>
+    <goto next="#record_report" />
+</block>
+</form>
