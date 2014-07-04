@@ -1,7 +1,7 @@
 <form id="agreement">
 <block>
     <prompt bargein="true" cond="true" >
-        {% include "audio.xml" with file="3.agreement" breakbefore="300" breakafter="5000" %}
+        {% include "audio.xml" with file="3.agreement" breakbefore="300ms" breakafter="5s" %}
     </prompt>
     <goto next="#agreement_choice" />
 </block>

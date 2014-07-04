@@ -1,7 +1,7 @@
 <form id="instructions">
 <block>
     <prompt>
-        {% include "audio.xml" with file="2.1.instructions" breakbefore="300" breakafter="300" %}
+        {% include "audio.xml" with file="2.1.instructions" breakbefore="300ms" breakafter="300ms" %}
     </prompt>
     <goto next="#record_report" />
 </block>

@@ -6,14 +6,13 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import os
 import logging
-import subprocess
 import json
 
 from django.utils import timezone
 from django.db import models
 
 from ivr.path import REPORT_FOLDER
-from ivr.utils import get_wave_duration
+from ivr.utils import get_wave_duration, convert_to_mp3
 
 logger = logging.getLogger(__name__)
 
@@ -106,10 +105,7 @@ class Report(models.Model):
         fwav.close()
 
     def convert_to_mp3(self):
-        cmd = "lame -m mo -t {src} {dst}".format(
-            src=self.audio_path(raw=True),
-            dst=self.audio_path())
-        subprocess.Popen(cmd.split())
+        convert_to_mp3.apply_async([self])
 
     @classmethod
     def get_or_none(cls, id):

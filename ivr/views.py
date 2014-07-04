@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from ivr.path import AUDIO_FOLDER, REPORT_FOLDER
-from ivr.utils import number_from_callerID, notify_new_report
+from ivr.utils import number_from_callerID, notify_new_report, sync_data
 from ivr.models import Report
 
 logger = logging.getLogger(__name__)
@@ -74,6 +74,7 @@ def ivr_valid_agreement(request):
     if report is not None:
         report.agreement = True
         report.save()
+        sync_data.apply_async([])
     return render(request,
                   'after_agreement.xml',
                   context,
@@ -93,7 +94,7 @@ def ivr_upload(request):
         context.update({'reportID': None, 'report': None})
         print(e)
     finally:
-        notify_new_report(report)
+        notify_new_report.apply_async([report])
 
     return render(request,
                   'after_upload.xml',

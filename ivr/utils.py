@@ -7,10 +7,13 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 import re
 import wave
+import subprocess
 
 from django.conf import settings
 from django.core.mail import send_mail
 from django.core.management import call_command
+
+from ivr.tasks import app
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +41,21 @@ ALL_COUNTRY_CODES = [1242, 1246, 1264, 1268, 1284, 1340, 1345, 1441, 1473,
                      976, 977, 98, 992, 993, 994, 995, 996, 998]
 
 
+@app.task
+def convert_to_mp3(report):
+    cmd = "lame -m mo -t {src} {dst}".format(
+        src=report.audio_path(raw=True),
+        dst=report.audio_path())
+    subprocess.Popen(cmd.split())
+
+
+@app.task
+def sync_data():
+    # sync data with online server
+    call_command('sync_ivr_data')
+
+
+@app.task
 def notify_new_report(report):
     # sync data with online server
     call_command('sync_ivr_data')

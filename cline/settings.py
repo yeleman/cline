@@ -46,6 +46,8 @@ INSTALLED_APPS = (
 
     'cline',
     'ivr',
+
+    'kombu.transport.django',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -145,8 +147,9 @@ OPERATORS = {ORANGE: ("Orange MALI", [7, 9, 4, 8, 90, 91]),
              MALITEL: ("Malitel", [2, 6, 98, 99]),
              FOREIGN: ("Extérieur", [])}
 COUNTRY_PREFIX = 223
-IVR_VOICE = 'renaud'
-# IVR_VOICE = 'kani'
+IVR_VOICE = 'renaud3'
+
+BROKER_URL = 'django://'
 
 VOICE_POP3_SERVER = '192.168.5.65'
 VOICE_POP3_PORT = 110

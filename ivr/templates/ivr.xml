@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
-<nomatch>
-    <goto next="#start" />
-</nomatch>
 <form id="start">
 <block>
-    <prompt bargein="true" cond="true" >
-        {% include "audio.xml" with file="1.intro" breakbefore="2000" breakafter="3000" %}
+    <prompt bargein="false">
+        {% include "audio.xml" with file="0.short-intro" breakbefore="2s" breakafter="1s" %}
+    </prompt>
+    <prompt bargein="true">
+        {% include "audio.xml" with file="1.intro" breakbefore="200ms" breakafter="5s" %}
     </prompt>
     <goto next="#first_choice" />
 </block>
 </form>
 
-{% include "digit_form.xml" with id="first_choice" filled_one="instructions" filled_two="additional-info" noinput="start" nomatch="start" %}
+{% include "digit_form.xml" with id="first_choice" filled_one="instructions" filled_two="additional-info" noinput="start" nomatch="instructions" %}
 
 {% include "2.2.additional-info_form.xml" %}
 

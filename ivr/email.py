@@ -89,6 +89,6 @@ def handle_incoming_sms(sms):
 
     if created:
         send_sms(sms.identity, settings.VOICE_AGREEMENT_MESSAGE)
-        notify_new_report(report)
+        notify_new_report.apply_async([report])
 
     return report
